@@ -1,11 +1,12 @@
 from http import HTTPStatus
-
+from django.db.models import Count, Q
 from rest_framework import viewsets
 from rest_framework.response import Response
 
 from core import serializers
 from core import models
 from core import tasks
+from core import consts
 
 
 class UserViewSet(viewsets.ViewSet):
@@ -27,7 +28,11 @@ class UserViewSet(viewsets.ViewSet):
 
     def list(self, request, *args, **kwargs):
         try:
-            obj = models.Department.objects.all()
+            obj = models.Department.objects.annotate(
+                worker_count=Count('workers__pk'),
+                male=Count('workers__gender', filter=Q(workers__gender=consts.MALE)),
+                famale=Count('workers__gender', filter=Q(workers__gender=consts.FEMALE))
+            )
             serializer = serializers.Department(obj, many=True)
             return Response(serializer.data, status=HTTPStatus.OK)
 

@@ -21,14 +21,9 @@ class Worker(serializers.Serializer):
         except Exception as ex:
             raise serializers.ValidationError(f'Ошибка: {ex.args}')
 
-    def validate_department(self, value):
-        if department := models.Department.objects.filter(name=value).first():
-            return department.id
-        raise serializers.ValidationError(f'Данного отделения не существует. Укажите верное id отделения.')
-
 
 class Department(serializers.ModelSerializer):
-    workers = serializers.SerializerMethodField()
+    worker_count = serializers.SerializerMethodField()
     male = serializers.SerializerMethodField()
     famale = serializers.SerializerMethodField()
 
@@ -36,11 +31,11 @@ class Department(serializers.ModelSerializer):
         model = models.Department
         fields = '__all__'
 
-    def get_workers(self, obj: models.Department):
-        return obj.get_count_worker()
+    def get_worker_count(self, obj: models.Department) -> int:
+        return obj.worker_count
 
-    def get_male(self, obj: models.Department):
-        return obj.get_count_gender_male()
+    def get_male(self, obj: models.Department) -> int:
+        return obj.male
 
-    def get_famale(self, obj: models.Department):
-        return obj.get_count_gender_famale()
+    def get_famale(self, obj: models.Department) -> int:
+        return obj.famale

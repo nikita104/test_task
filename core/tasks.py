@@ -5,7 +5,7 @@ from core import models
 
 @celery_app.task()
 def create_user(data: dict):
-    department = models.Department.objects.get(name=data['department'])
+    department, _ = models.Department.objects.get_or_create(name=data['department'])
     models.Worker.objects.create(
         last_name=data['last_name'],
         first_name=data['first_name'],

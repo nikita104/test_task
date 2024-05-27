@@ -1,6 +1,6 @@
-MALE = 'Мужской'
-FEMALE = 'Женский'
+MALE = 1
+FEMALE = 2
 GENDER_CHOICE = (
-    (MALE, MALE),
-    (FEMALE, FEMALE),
+    (MALE, 'Мужской'),
+    (FEMALE, 'Женский'),
 )

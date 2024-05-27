@@ -13,21 +13,12 @@ class Department(models.Model):
     def __str__(self) -> str:
         return self.name
 
-    def get_count_worker(self) -> int:
-        return self.workers.count()
-
-    def get_count_gender_male(self):
-        return self.workers.filter(gender=consts.MALE).count()
-
-    def get_count_gender_famale(self):
-        return self.workers.filter(gender=consts.FEMALE).count()
-
 
 class Worker(models.Model):
     last_name = models.CharField(verbose_name='Фамилия', max_length=255, db_index=True)
     first_name = models.CharField(verbose_name='Имя', max_length=255)
     middle_name = models.CharField(verbose_name='Отчество', max_length=255, blank=True)
-    gender = models.CharField(verbose_name='Пол', max_length=255, choices=consts.GENDER_CHOICE)
+    gender = models.IntegerField(verbose_name='Пол', choices=consts.GENDER_CHOICE)
     department = models.ForeignKey(Department, on_delete=models.PROTECT,
                                    verbose_name='Отделение', related_name='workers')
 
